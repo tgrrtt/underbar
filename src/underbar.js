@@ -148,8 +148,25 @@ var _ = {};
 
   // Calls the method named by functionOrKey on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
-  _.invoke = function(collection, functionOrKey, args) {
+  // _.invoke([1,2,3], multiplyBy3) should return [3,6,9]
+  // _.invoke([1,2,3], multiplyBy, 4) should return [4,8,12]
+  
+  _.invoke = function(collection, functionOrKey, argsArray) {
+    // if (typeof functionOrKey === 'string') {
+    //   return _.map(collection, function(value) {
+    //     return value[functionOrKey].apply(value);
+    //   })
+    // } else {
+    //   return _.map(collection, function(value) {
+    //     return functionOrKey.apply(value);
+    //   })
+    // }
+    return _.map(collection, function(value) {
+      return ((typeof functionOrKey !== "string") ? functionOrKey : value[functionOrKey]).apply(value, argsArray);
+    })
   };
+
+
 
   // Reduces an array or object to a single value by repetitively calling
   // iterator(previousValue, item) for each item. previousValue should be
