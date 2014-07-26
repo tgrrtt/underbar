@@ -182,6 +182,13 @@ var _ = {};
   //     return total + number;
   //   }, 0); // should be 6
   _.reduce = function(collection, iterator, accumulator) {
+    var total = accumulator !== undefined ? accumulator : collection[0];
+
+    _.each(collection, function (item) {
+      total = iterator(total, item);
+    })
+
+    return total;
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -200,6 +207,14 @@ var _ = {};
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    iterator = iterator ? iterator : _.identity;
+    return _.reduce(collection, function(passed, item) {
+      if (passed === true && iterator(item)) {
+        return true;
+      } else {
+        return false;
+      }
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
