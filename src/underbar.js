@@ -221,6 +221,23 @@ var _ = {};
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    if (collection == false) {
+      return false
+    }
+    iterator = iterator ? iterator : _.identity;
+
+    try {
+      return _.reduce(collection, function(passed, item) {
+        if (iterator(item)) {
+          throw true;
+        } else {
+          return false;
+        }
+      }, true);
+    } catch (bool){
+      return bool;
+    }
+    
   };
 
 
