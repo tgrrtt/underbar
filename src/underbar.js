@@ -39,13 +39,11 @@ var _ = {};
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
-    if (n == 0) {
+    if (n === 0) {
       return [];
     }
-    if (n > 0) {
-      n = 0 - n;
-    }
-    return n === undefined ? array[array.length-1] : array.slice(n);
+
+    return n === undefined ? array[array.length-1] : array.slice(-n);
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -58,7 +56,7 @@ var _ = {};
       for (var i = 0; i < collection.length; i++) {
         iterator(collection[i], i, collection);
       }
-    } else if (typeof collection == "object") {
+    } else if (typeof collection === "object") {
       for (var i in collection) {
         iterator(collection[i], i, collection);
       } 
@@ -84,7 +82,7 @@ var _ = {};
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
-    var newArray = []
+    var newArray = [];
     _.each(collection, function (item) {
       if (test(item)) {
         newArray.push(item);
@@ -100,7 +98,7 @@ var _ = {};
     // copying code in and modifying it
     return _.filter(collection, function(item){
       return !test(item);
-    })
+    });
   };
 
   // Produce a duplicate-free version of the array.
@@ -111,7 +109,7 @@ var _ = {};
         newArray.push(item);
         return item;
       }
-    })
+    });
   };
 
 
@@ -124,7 +122,7 @@ var _ = {};
     var newArray = [];
     _.each(collection, function(item) {
       newArray.push(iterator(item));
-    })
+    });
     return newArray;
   };
 
@@ -163,7 +161,7 @@ var _ = {};
     // }
     return _.map(collection, function(value) {
       return ((typeof functionOrKey !== "string") ? functionOrKey : value[functionOrKey]).apply(value, argsArray);
-    })
+    });
   };
 
 
@@ -186,7 +184,7 @@ var _ = {};
 
     _.each(collection, function (item) {
       total = iterator(total, item);
-    })
+    });
 
     return total;
   };
@@ -221,8 +219,8 @@ var _ = {};
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
-    if (collection == false) {
-      return false
+    if (!collection.length) {
+      return false;
     }
     iterator = iterator ? iterator : _.identity;
 
@@ -260,11 +258,26 @@ var _ = {};
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    
+    _.each(arguments, function (item) {
+      _.each(item, function(item, i) {
+        obj[i] = item;
+      });
+    });
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    _.each(arguments, function (item) {
+      _.each(item, function(item, i) {
+        if (!obj.hasOwnProperty(i)) {
+          obj[i] = item;
+        }
+      });
+    });
+    return obj;
   };
 
 
@@ -315,6 +328,12 @@ var _ = {};
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments);
+    func = args.shift();
+    wait = args.shift();
+    setTimeout(function() {
+      func.apply(this, args);
+    }, wait);
   };
 
 
