@@ -57,8 +57,8 @@ var _ = {};
         iterator(collection[i], i, collection);
       }
     } else if (typeof collection === "object") {
-      for (var i in collection) {
-        iterator(collection[i], i, collection);
+      for (var j in collection) {
+        iterator(collection[j], j, collection);
       } 
     }
   };
@@ -319,6 +319,14 @@ var _ = {};
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var results = {};
+    return function (argument) {
+      if (results[argument]) {
+        return results[argument];
+      }
+      results[argument] = func.apply(this, arguments);
+      return results[argument];
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
