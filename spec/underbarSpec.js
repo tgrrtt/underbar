@@ -200,19 +200,6 @@ describe('invoke, when provided a function reference', function() {
   });
 });
 
-describe('invoke, when provided a function reference and argsArray', function() {
-  it('runs the input function on each item in the array, and returns a list of results', function() {
-    // arg needs passed to _.invoke as an array, but it's accessed like a normal argument from inside the function.
-    var multiplyBy = function(number){
-      return this * number;
-    };
-
-    var multipliedByThree = _.invoke([1,2,3], multiplyBy, [3]);
-
-    expect(multipliedByThree).to.eql([3,6,9]);
-  });
-});
-
 describe('invoke, when provided a method name', function() {
   it('runs the specified method on each item in the array, and returns a list of results', function() {
     var upperCasedStrings = _.invoke(['dog', 'cat'], 'toUpperCase');
