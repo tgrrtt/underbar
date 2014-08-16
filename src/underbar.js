@@ -432,6 +432,17 @@ var _ = {};
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+    var args = Array.prototype.slice.call(arguments, 0);
+    var removedFrom = args.splice(0,1)[0];
+    _.each(args, function (array) {
+      _.each(array, function (item) {
+        var index = removedFrom.indexOf(item);
+        if (index !== -1) {
+          removedFrom.splice(index, 1);
+        }
+      });
+    });
+    return removedFrom;
   };
 
 
